@@ -2,7 +2,7 @@
 
 A simple, mobile-optimized web tool that helps you understand how close you are to triggering additional attendance warnings based on your workplace attendance rules (3 occurrences = 1 warning, 4 warnings = termination threshold).
 
-This tool is intended for **personal reference and education only** and works extremely well on smartphones.
+This tool is intended for **personal reference and education only** and is designed to be used on mobile platforms. 
 
 ---
 
