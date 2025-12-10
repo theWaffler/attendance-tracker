@@ -16,6 +16,9 @@ export function renderTimeline() {
   const today = new Date(getTodayISO() + "T00:00:00");
   const end = new Date(today.getTime() + 365 * 24 * 60 * 60 * 1000); // 12 months ahead
 
+  const todayStr = today.toISOString().slice(0, 10);
+  const endStr = end.toISOString().slice(0, 10);
+
   const markers = [];
 
   // Today
@@ -78,4 +81,32 @@ export function renderTimeline() {
     dot.title = `${m.label} (${m.date.toISOString().slice(0, 10)})`;
     axis.appendChild(dot);
   });
+
+  // Date labels under the axis (start and end)
+  const labelsRow = document.createElement("div");
+  labelsRow.className = "timeline-labels";
+  labelsRow.innerHTML = `
+    <span>${todayStr}</span>
+    <span>${endStr}</span>
+  `;
+  container.appendChild(labelsRow);
+
+  // Legend
+  const legend = document.createElement("div");
+  legend.className = "timeline-legend";
+  legend.innerHTML = `
+    <span class="legend-item">
+      <span class="legend-dot legend-today"></span> Today
+    </span>
+    <span class="legend-item">
+      <span class="legend-dot legend-warning"></span> Oldest warning expiration
+    </span>
+    <span class="legend-item">
+      <span class="legend-dot legend-sim"></span> Simulated call-out
+    </span>
+    <span class="legend-item">
+      <span class="legend-dot legend-holiday"></span> Holiday
+    </span>
+  `;
+  container.appendChild(legend);
 }
