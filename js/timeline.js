@@ -2,7 +2,7 @@ import { getState, getTodayISO } from "./state.js";
 import { getUpcomingHolidaysWithin } from "./holidays.js";
 
 function daysBetween(a, b) {
-  const ms = 86400000;
+  const ms = 24 * 60 * 60 * 1000;
   return Math.round((b - a) / ms);
 }
 
@@ -14,34 +14,59 @@ export function renderTimeline() {
 
   const state = getState();
   const today = new Date(getTodayISO() + "T00:00:00");
-  const end = new Date(today.getTime() + 365 * 86400000);
+  const end = new Date(today.getTime() + 365 * 24 * 60 * 60 * 1000); // 12 months ahead
 
   const markers = [];
 
-  markers.push({ type: "today", label: "Today", date: today });
-
-  if (state.oldestWarningExpires) {
-    const exp = new Date(state.oldestWarningExpires + "T00:00:00");
-    if (exp >= today && exp <= end)
-      markers.push({ type: "warning-exp", label: "Warning exp", date: exp });
-  }
-
-  state.simDates.forEach(d => {
-    const sim = new Date(d + "T00:00:00");
-    if (sim >= today && sim <= end)
-      markers.push({ type: "sim", label: "Simulated", date: sim });
+  // Today
+  markers.push({
+    type: "today",
+    label: "Today",
+    date: today
   });
 
-  const holidays = getUpcomingHolidaysWithin(365, today);
-  holidays.forEach(h =>
-    markers.push({ type: "holiday", label: h.name, date: h.dateObj })
-  );
+  // Oldest warning expiration (if within next 12 months)
+  if (state.oldestWarningExpires) {
+    const exp = new Date(state.oldestWarningExpires + "T00:00:00");
+    if (!isNaN(exp.getTime()) && exp >= today && exp <= end) {
+      markers.push({
+        type: "warning-exp",
+        label: "Oldest warning expires",
+        date: exp
+      });
+    }
+  }
 
+  // Simulated call-outs
+  if (state.simDates && state.simDates.length) {
+    state.simDates.forEach(d => {
+      const sim = new Date(d + "T00:00:00");
+      if (!isNaN(sim.getTime()) && sim >= today && sim <= end) {
+        markers.push({
+          type: "sim",
+          label: "Simulated call-out",
+          date: sim
+        });
+      }
+    });
+  }
+
+  // Holidays within next 12 months
+  const holidays = getUpcomingHolidaysWithin(365, today);
+  holidays.forEach(h => {
+    markers.push({
+      type: "holiday",
+      label: h.name,
+      date: h.dateObj
+    });
+  });
+
+  // Axis
   const axis = document.createElement("div");
   axis.className = "timeline-axis";
   container.appendChild(axis);
 
-  const totalDays = daysBetween(today, end);
+  const totalDays = daysBetween(today, end) || 1;
 
   markers.forEach(m => {
     const offset = daysBetween(today, m.date);
@@ -50,7 +75,7 @@ export function renderTimeline() {
     const dot = document.createElement("div");
     dot.className = "timeline-marker " + m.type;
     dot.style.left = `${pct}%`;
-    dot.title = `${m.label}: ${m.date.toISOString().slice(0, 10)}`;
+    dot.title = `${m.label} (${m.date.toISOString().slice(0, 10)})`;
     axis.appendChild(dot);
   });
 }

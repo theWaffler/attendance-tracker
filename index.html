@@ -16,13 +16,39 @@
       <div class="header-main">
         <h1>Attendance Risk</h1>
         <p class="subtitle">
-          Personal tool to understand where you stand with attendance warnings.
+          Personal, educational tool to understand how close you are to a 4th attendance warning.
         </p>
       </div>
     </header>
 
+    <!-- Overview / Policy explanation -->
     <section class="card">
-      <h2>Current Status</h2>
+      <h2>How This Tool Works</h2>
+      <p class="body-text">
+        This calculator models a common attendance policy where unscheduled call-outs accumulate
+        into warnings and the 4th warning is considered termination-level risk.
+      </p>
+      <ul class="body-list">
+        <li>Each unscheduled call-out that counts as an occurrence = <strong>1 occurrence</strong>.</li>
+        <li>Every <strong>3 occurrences</strong> = <strong>1 written attendance warning</strong>.</li>
+        <li>Warnings stay active for about <strong>6 months</strong> from the date they are issued.</li>
+        <li>Reaching <strong>4 active warnings</strong> at the same time is treated as a termination threshold.</li>
+        <li>Attendance is typically reviewed using a <strong>rolling 12-month window</strong>, not a calendar year reset.</li>
+        <li>Occurrences and warnings do <strong>not</strong> automatically reset on January 1.</li>
+      </ul>
+      <p class="hint">
+        This is an unofficial, personal tracking tool. It does not replace your employer’s HR system or decisions.
+      </p>
+    </section>
+
+    <!-- Current status -->
+    <section class="card">
+      <h2>1. Current Status (What HR Sees Today)</h2>
+      <p class="body-text">
+        Use this section to mirror your current reality: how many active warnings you have,
+        how many recent unscheduled call-outs you’ve made since the last warning,
+        and when your oldest warning expires.
+      </p>
 
       <div class="field-group">
         <label>Active attendance warnings</label>
@@ -38,6 +64,10 @@
           />
           <button type="button" class="stepper-btn" data-step="1" data-target="warningsInput">+</button>
         </div>
+        <p class="hint">
+          Include all <strong>attendance warnings</strong> HR could count toward the 4-warning limit
+          (not just call-out warnings, if your company lumps all attendance issues together).
+        </p>
       </div>
 
       <div class="field-group">
@@ -48,16 +78,30 @@
           <button type="button" class="chip" data-extra="2">2</button>
         </div>
         <input id="extraCalloutsInput" type="hidden" value="0" />
+        <p class="hint">
+          This is how many unscheduled call-outs you’ve had <strong>after</strong> your most recent warning.
+          If you’re unsure, choose 0 and treat the result as the most generous estimate.
+        </p>
       </div>
 
       <div class="field-group">
         <label for="oldestWarningExpires">Oldest active warning expires on</label>
         <input id="oldestWarningExpires" type="date" />
+        <p class="hint">
+          Warnings do not follow a calendar year. Each one has its own ~6-month life.
+          Once this oldest warning expires, your total active warnings should drop by one (assuming no new warnings).
+        </p>
       </div>
     </section>
 
+    <!-- Risk summary -->
     <section class="card">
-      <h2>Risk Summary</h2>
+      <h2>2. Risk Summary (Occurrences & “Safe” Room)</h2>
+      <p class="body-text">
+        This section converts your inputs into “occurrences” and estimates how many more unscheduled call-outs
+        you can take before you hit the 4-warning threshold. It also counts simulated future call-outs.
+      </p>
+
       <div id="riskSummary" class="results">
         <p>Adjust the values above to see your current risk.</p>
       </div>
@@ -70,35 +114,86 @@
         <div class="meter-bar">
           <div id="meterFill" class="meter-fill"></div>
         </div>
+        <p class="hint">
+          This meter assumes the 4th warning is triggered on the <strong>12th occurrence</strong>,
+          so the “safe” range tops out at <strong>11 occurrences</strong>.
+          Simulated future dates (below) are added into this count.
+        </p>
       </div>
     </section>
 
+    <!-- Simulated call-outs -->
     <section class="card">
-      <h2>Simulated Call-Outs</h2>
+      <h2>3. Simulated Future Call-Outs</h2>
+      <p class="body-text">
+        This section lets you sandbox future unscheduled call-out dates to see how they affect your risk.
+        Each simulated date is treated as <strong>one additional occurrence</strong> and is also checked against
+        holidays and the day-before/day-after rules that may impact holiday pay.
+      </p>
 
       <div class="field-group">
         <label>Add simulated call-out date</label>
         <input id="simInput" type="date" />
         <button id="addSimBtn" class="chip">Add</button>
+        <p class="hint">
+          Add any date you’re thinking of calling out. This does <strong>not</strong> change reality;
+          it just shows you the risk if you did.
+        </p>
       </div>
 
       <div class="field-group">
         <label>Simulated dates</label>
         <div id="simList" class="sim-list"></div>
+        <p class="hint">
+          Remove dates here if you change your mind about simulating them. Each simulated date is added to the
+          total occurrence count in the risk summary above.
+        </p>
       </div>
 
       <div id="simResult" class="results"></div>
     </section>
 
+    <!-- Timeline -->
     <section class="card">
-      <h2>Timeline (Next 12 Months)</h2>
+      <h2>4. Timeline (Next 12 Months)</h2>
+      <p class="body-text">
+        This timeline shows today, your oldest warning’s expiration, all simulated call-out dates,
+        and upcoming holidays within the next 12 months. It helps you visualize how everything clusters over time.
+      </p>
+
       <div class="timeline-wrapper">
         <div id="timeline" class="timeline"></div>
       </div>
+
+      <p class="hint">
+        Holidays and the days right before/after can affect eligibility for holiday pay under many policies.
+        This tool highlights holidays so you can see if your simulated dates are uncomfortably close to them.
+      </p>
+    </section>
+
+    <!-- Global disclaimer -->
+    <section class="card">
+      <h2>5. Important Disclaimer</h2>
+      <p class="body-text">
+        This tool is meant for <strong>personal education and transparency</strong> only.
+        It performs math based on a generic 3-occurrences-per-warning, 4-warnings-to-termination style policy,
+        plus 6-month warning lifespans and a 12-month rolling attendance review.
+      </p>
+      <ul class="body-list">
+        <li>It is <strong>not</strong> an official HR system.</li>
+        <li>It is <strong>not</strong> legal advice.</li>
+        <li>It is <strong>not</strong> a guarantee of how your employer will act.</li>
+        <li>HR can always enforce the policy more strictly or more leniently than this model.</li>
+      </ul>
+      <p class="body-text">
+        Do <strong>not</strong> use this tool to abuse or manipulate your employer’s attendance policy.
+        It exists so you can understand the math and consequences, not to find loopholes.
+        You are responsible for your own attendance decisions.
+      </p>
     </section>
 
     <footer class="app-footer">
-      <span>Attendance Risk Calculator · Personal Use Only</span>
+      <span>Attendance Risk Calculator · Personal Use & Education Only</span>
     </footer>
   </div>
 
