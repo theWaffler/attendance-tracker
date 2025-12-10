@@ -8,7 +8,7 @@ This tool is intended for **personal reference and education only** and is desig
 
 ## Live Site
 
-https://theWaffler.github.io/attendance-risk/
+https://thewaffler.github.io/attendance-tracker/
 
 ---
 
