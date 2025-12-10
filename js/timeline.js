@@ -28,10 +28,10 @@ export function renderTimeline() {
     date: today
   });
 
-  // Oldest warning expiration (if within next 12 months)
+  // Oldest warning expiration (always show if valid and in future)
   if (state.oldestWarningExpires) {
     const exp = new Date(state.oldestWarningExpires + "T00:00:00");
-    if (!isNaN(exp.getTime()) && exp >= today && exp <= end) {
+    if (!isNaN(exp.getTime()) && exp >= today) {
       markers.push({
         type: "warning-exp",
         label: "Oldest warning expires",
@@ -78,6 +78,12 @@ export function renderTimeline() {
     const dot = document.createElement("div");
     dot.className = "timeline-marker " + m.type;
     dot.style.left = `${pct}%`;
+    
+    // Add visual indicator if marker is outside the 12-month window
+    if (m.date < today || m.date > end) {
+      dot.classList.add("out-of-range");
+    }
+    
     dot.title = `${m.label} (${m.date.toISOString().slice(0, 10)})`;
     axis.appendChild(dot);
   });

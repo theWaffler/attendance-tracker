@@ -374,6 +374,11 @@ input[type="date"]:focus {
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
 }
 
+.timeline-marker.out-of-range {
+  opacity: 0.6;
+  border: 2px dashed var(--text-secondary);
+}
+
 .timeline-labels {
   display: flex;
   justify-content: space-between;
