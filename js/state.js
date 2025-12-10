@@ -9,7 +9,7 @@ const defaultState = {
   warnings: 0,
   extraCallouts: 0,
   oldestWarningExpires: "",
-  simDate: ""
+  simDates: []
 };
 
 let state = Object.assign({}, defaultState, loadState() || {});
@@ -19,24 +19,35 @@ export function getState() {
 }
 
 export function setWarnings(value) {
-  const v = Math.min(3, Math.max(0, Number(value) || 0));
-  state.warnings = v;
+  state.warnings = Math.max(0, Math.min(3, Number(value) || 0));
   persist();
 }
 
-export function setExtraCallouts(value) {
-  const v = Math.min(2, Math.max(0, Number(value) || 0));
-  state.extraCallouts = v;
+export function setExtraCallouts(v) {
+  state.extraCallouts = Math.max(0, Math.min(2, Number(v) || 0));
   persist();
 }
 
-export function setOldestWarningExpires(dateStr) {
-  state.oldestWarningExpires = dateStr || "";
+export function setOldestWarningExpires(d) {
+  state.oldestWarningExpires = d || "";
   persist();
 }
 
-export function setSimDate(dateStr) {
-  state.simDate = dateStr || "";
+// MULTI-DATE SIMULATION
+export function getSimDates() {
+  return state.simDates;
+}
+
+export function addSimDate(dateStr) {
+  if (!dateStr) return;
+  if (!state.simDates.includes(dateStr)) {
+    state.simDates.push(dateStr);
+    persist();
+  }
+}
+
+export function removeSimDate(dateStr) {
+  state.simDates = state.simDates.filter(d => d !== dateStr);
   persist();
 }
 
@@ -44,11 +55,10 @@ function persist() {
   saveState(state);
 }
 
-// Derived
-
+// Derived values
 export function computeOccurrences() {
-  const { warnings, extraCallouts } = state;
-  const occ = warnings * OCCURRENCES_PER_WARNING + extraCallouts;
+  const simCount = state.simDates.length;
+  const occ = state.warnings * OCCURRENCES_PER_WARNING + state.extraCallouts + simCount;
   const remaining = MAX_SAFE_OCCURRENCES - occ;
   return { total: occ, remaining };
 }
@@ -56,4 +66,3 @@ export function computeOccurrences() {
 export function getTodayISO() {
   return todayISO();
 }
-
