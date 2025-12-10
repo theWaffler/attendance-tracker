@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Attendance Risk Calculator</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#020617" />
+  <link rel="manifest" href="manifest.json" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="app-header">
+      <div class="header-main">
+        <h1>Attendance Risk</h1>
+        <p class="subtitle">
+          Personal tool to understand where you stand with attendance warnings.
+        </p>
+      </div>
+      <button id="themeToggle" class="icon-btn" aria-label="Toggle theme">
+        🌙
+      </button>
+    </header>
+
+    <section class="card">
+      <h2>Current Status</h2>
+
+      <div class="field-group">
+        <label>Active attendance warnings</label>
+        <div class="stepper-row">
+          <button type="button" class="stepper-btn" data-step="-1" data-target="warningsInput">−</button>
+          <input
+            id="warningsInput"
+            type="number"
+            min="0"
+            max="3"
+            value="0"
+            inputmode="numeric"
+          />
+          <button type="button" class="stepper-btn" data-step="1" data-target="warningsInput">+</button>
+        </div>
+        <p class="hint">
+          Include all active attendance warnings HR could count toward the 4-warning limit.
+        </p>
+      </div>
+
+      <div class="field-group">
+        <label>Unscheduled call-outs since your last warning</label>
+        <div class="chip-row" id="extraChips">
+          <button type="button" class="chip chip-selected" data-extra="0">0</button>
+          <button type="button" class="chip" data-extra="1">1</button>
+          <button type="button" class="chip" data-extra="2">2</button>
+        </div>
+        <input id="extraCalloutsInput" type="hidden" value="0" />
+        <p class="hint">
+          If you’re unsure, pick 0 and treat the result as an upper bound.
+        </p>
+      </div>
+
+      <div class="field-group">
+        <label for="oldestWarningExpires">Oldest active warning expires on</label>
+        <input id="oldestWarningExpires" type="date" />
+        <p class="hint">
+          Warnings don’t reset on Jan 1. Each warning usually has a 6-month life from the issue date.
+        </p>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Risk Summary</h2>
+      <div id="riskSummary" class="results">
+        <p>Adjust the values above to see your current risk.</p>
+      </div>
+
+      <div class="meter-container">
+        <div class="meter-label-row">
+          <span>Estimated occurrences used</span>
+          <span id="meterCountLabel">0 / 11</span>
+        </div>
+        <div class="meter-bar">
+          <div id="meterFill" class="meter-fill"></div>
+        </div>
+        <p class="hint">
+          Based on 3 occurrences = 1 warning and the 4th warning as the termination threshold (12th occurrence).
+        </p>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Simulate a New Unscheduled Call-out</h2>
+      <div class="field-group">
+        <label for="simDate">Simulated absence date</label>
+        <input id="simDate" type="date" />
+        <p class="hint">
+          The tool will estimate if this pushes you closer to the 4th warning and if it’s near a holiday (holiday pay risk).
+        </p>
+      </div>
+      <div id="simResult" class="results">
+        <p>Select a date to simulate.</p>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Timeline (Next 12 Months)</h2>
+      <div class="timeline-wrapper">
+        <div id="timeline" class="timeline"></div>
+      </div>
+      <p class="hint">
+        Shows today, your oldest warning’s expiration, your simulated date (if any), and upcoming holidays.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Assumptions & Policy Model</h2>
+      <ul class="assumptions">
+        <li>1 unscheduled call-out that counts as an occurrence = 1 occurrence.</li>
+        <li>Every 3 occurrences = 1 attendance warning.</li>
+        <li>Warnings are assumed active for 6 months from their issue date.</li>
+        <li>The 4th active warning is treated as a termination-level threshold.</li>
+        <li>Attendance is reviewed using a rolling 12-month window, not a calendar year reset.</li>
+      </ul>
+      <p class="hint">
+        This is an educational tool. Do not abuse or manipulate your employer’s policy. You are responsible for your own decisions.
+      </p>
+    </section>
+
+    <footer class="app-footer">
+      <span>Attendance Risk Calculator · Personal Use Only</span>
+    </footer>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
+
