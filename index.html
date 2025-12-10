@@ -16,7 +16,7 @@
       <div class="header-main">
         <h1>Attendance Risk</h1>
         <p class="subtitle">
-          Personal, educational tool to understand how close you are to a 4th attendance warning.
+          Educational tool to understand how close you are to a 4th attendance warning (automatic firing).
         </p>
       </div>
     </header>
@@ -25,11 +25,13 @@
     <section class="card">
       <h2>How This Tool Works</h2>
       <p class="body-text">
-        This calculator models a common attendance policy where unscheduled call-outs accumulate
+        This calculator models CF policy where unscheduled call outs accumulate
         into warnings and the 4th warning is considered termination-level risk.
+        this calculator has a built in safety factor of one extra unscheduled call out
+        before reaching 4th warning threshold.
       </p>
       <ul class="body-list">
-        <li>Each unscheduled call-out that counts as an occurrence = <strong>1 occurrence</strong>.</li>
+        <li>Each unscheduled call out that counts as an occurrence = <strong>1 occurrence</strong>.</li>
         <li>Every <strong>3 occurrences</strong> = <strong>1 written attendance warning</strong>.</li>
         <li>Warnings stay active for about <strong>6 months</strong> from the date they are issued.</li>
         <li>Reaching <strong>4 active warnings</strong> at the same time is treated as a termination threshold.</li>
@@ -37,16 +39,16 @@
         <li>Occurrences and warnings do <strong>not</strong> automatically reset on January 1.</li>
       </ul>
       <p class="hint">
-        This is an unofficial, personal tracking tool. It does not replace your employer’s HR system or decisions.
+        This is an unofficial, personal tracking tool. It does not replace the HR's system or decisions.
       </p>
     </section>
 
     <!-- Current status -->
     <section class="card">
-      <h2>1. Current Status (What HR Sees Today)</h2>
+      <h2>1. Current Status</h2>
       <p class="body-text">
         Use this section to mirror your current reality: how many active warnings you have,
-        how many recent unscheduled call-outs you’ve made since the last warning,
+        how many recent unscheduled call outs you’ve made since the last warning,
         and when your oldest warning expires.
       </p>
 
@@ -71,7 +73,7 @@
       </div>
 
       <div class="field-group">
-        <label>Unscheduled call-outs since your last warning</label>
+        <label>Unscheduled call outs since your last warning</label>
         <div class="chip-row" id="extraChips">
           <button type="button" class="chip chip-selected" data-extra="0">0</button>
           <button type="button" class="chip" data-extra="1">1</button>
@@ -79,7 +81,7 @@
         </div>
         <input id="extraCalloutsInput" type="hidden" value="0" />
         <p class="hint">
-          This is how many unscheduled call-outs you’ve had <strong>after</strong> your most recent warning.
+          This is how many unscheduled call outs you’ve had <strong>after</strong> your most recent warning.
           If you’re unsure, choose 0 and treat the result as the most generous estimate.
         </p>
       </div>
@@ -88,7 +90,7 @@
         <label for="oldestWarningExpires">Oldest active warning expires on</label>
         <input id="oldestWarningExpires" type="date" />
         <p class="hint">
-          Warnings do not follow a calendar year. Each one has its own ~6-month life.
+          Warnings do not follow a calendar year. Each one has its own 6 month life.
           Once this oldest warning expires, your total active warnings should drop by one (assuming no new warnings).
         </p>
       </div>
@@ -96,10 +98,10 @@
 
     <!-- Risk summary -->
     <section class="card">
-      <h2>2. Risk Summary (Occurrences & “Safe” Room)</h2>
+      <h2>2. Risk Summary (Occurrences & Safety Factor)</h2>
       <p class="body-text">
-        This section converts your inputs into “occurrences” and estimates how many more unscheduled call-outs
-        you can take before you hit the 4-warning threshold. It also counts simulated future call-outs.
+        This section converts your inputs into “occurrences” and estimates how many more unscheduled call outs
+        you can take before you hit the 4-warning threshold. It also counts simulated future call outs.
       </p>
 
       <div id="riskSummary" class="results">
@@ -124,15 +126,17 @@
 
     <!-- Simulated call-outs -->
     <section class="card">
-      <h2>3. Simulated Future Call-Outs</h2>
+      <h2>3. Simulated Future Call Outs</h2>
       <p class="body-text">
-        This section lets you sandbox future unscheduled call-out dates to see how they affect your risk.
+        This section lets you sandbox future unscheduled call out dates to see how they affect your risk.
         Each simulated date is treated as <strong>one additional occurrence</strong> and is also checked against
         holidays and the day-before/day-after rules that may impact holiday pay.
+        2026 Holiday data is included.
+        2025 Holiday data is <strong>NOT</strong> included.
       </p>
 
       <div class="field-group">
-        <label>Add simulated call-out date</label>
+        <label>Add simulated call out date</label>
         <input id="simInput" type="date" />
         <button id="addSimBtn" class="chip">Add</button>
         <p class="hint">
@@ -175,8 +179,8 @@
     <section class="card">
       <h2>5. Important Disclaimer</h2>
       <p class="body-text">
-        This tool is meant for <strong>personal education and transparency</strong> only.
-        It performs math based on a generic 3-occurrences-per-warning, 4-warnings-to-termination style policy,
+        This tool is meant for <strong>education and transparency</strong> only.
+        It performs math based on a HR's current attendance policy 3-occurrences-per-warning, 4-warnings-to-termination,
         plus 6-month warning lifespans and a 12-month rolling attendance review.
       </p>
       <ul class="body-list">
@@ -193,7 +197,7 @@
     </section>
 
     <footer class="app-footer">
-      <span>Attendance Risk Calculator · Personal Use & Education Only</span>
+      <span>Attendance Risk Calculator · Educational use only</span>
     </footer>
   </div>
 
